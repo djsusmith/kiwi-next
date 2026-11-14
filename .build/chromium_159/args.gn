@@ -1,0 +1,37 @@
+target_os = "android"
+target_cpu = "arm64"
+is_debug = false
+is_java_debug = false
+
+android_channel = "dev"
+is_official_build = true
+is_component_build = false
+is_chrome_branded = false
+is_clang = true
+symbol_level = 1
+exclude_unwind_tables = false
+
+use_unofficial_version_number = false
+android_default_version_code = "1"
+android_default_version_name = "159.0.8144.0-kiwi"
+
+fieldtrial_testing_like_official_build = true
+enable_iterator_debugging = false
+
+google_api_key = "KIWIBROWSER"
+google_default_client_id = "42.apps.kiwibrowser.com"
+google_default_client_secret = "KIWIBROWSER_NOT_SO_SECRET"
+use_official_google_api_keys = false
+
+ffmpeg_branding = "Chrome"
+proprietary_codecs = true
+enable_widevine = true
+enable_mse_mpeg2ts_stream_parser = true
+
+v8_use_external_startup_data = true
+enable_extensions = true
+enable_pdf = false
+enable_plugins = false
+
+disable_android_lint = true
+treat_warnings_as_errors = false
