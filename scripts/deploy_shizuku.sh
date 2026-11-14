@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+UNINSTALL_PREV=false
+if [ "${1:-}" = "--uninstall-previous" ]; then
+  UNINSTALL_PREV=true
+  shift
+fi
+
 if [ "$#" -lt 1 ]; then
-  echo "Usage: bash scripts/deploy_shizuku.sh <apk_path> [package_name]" >&2
+  echo "Usage: bash scripts/deploy_shizuku.sh [--uninstall-previous] <apk_path> [package_name]" >&2
   exit 1
 fi
 
@@ -14,7 +20,12 @@ if [ ! -f "$APK_PATH" ]; then
   exit 1
 fi
 
-echo "Installing $APK_PATH via Shizuku (rish)..."
+if [ "$UNINSTALL_PREV" = true ]; then
+  echo "Uninstalling previous $PKG_NAME via Shizuku (rish)..."
+  rish -c "pm uninstall \"$PKG_NAME\"" || true
+fi
+
+echo "Installing signed APK $APK_PATH via Shizuku (rish)..."
 rish -c "pm install -r \"$APK_PATH\""
 
 echo "Launching $PKG_NAME..."

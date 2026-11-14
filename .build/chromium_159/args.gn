@@ -13,7 +13,7 @@ exclude_unwind_tables = false
 
 use_unofficial_version_number = false
 android_default_version_code = "1"
-android_default_version_name = "159.0.8144.0-kiwi"
+android_default_version_name = "160.0.8157.3-kiwi"
 
 fieldtrial_testing_like_official_build = true
 enable_iterator_debugging = false

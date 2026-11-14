@@ -6,17 +6,17 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class TestAuditChromiumOverlay(unittest.TestCase):
-    def test_chromium_version_is_159(self):
+    def test_chromium_version_is_latest_dev(self):
         ver = parse_version_file(REPO_ROOT / "CHROMIUM_VERSION")
-        self.assertEqual(ver["CHROMIUM_MAJOR"], "159")
+        self.assertEqual(ver["CHROMIUM_MAJOR"], "160")
         self.assertEqual(ver["CHROMIUM_MINOR"], "0")
-        self.assertEqual(ver["CHROMIUM_BUILD"], "8144")
-        self.assertEqual(ver["CHROMIUM_PATCH"], "0")
+        self.assertEqual(ver["CHROMIUM_BUILD"], "8157")
+        self.assertEqual(ver["CHROMIUM_PATCH"], "3")
 
-    def test_kiwi_version_is_159(self):
+    def test_kiwi_version_is_latest_dev(self):
         ver = parse_version_file(REPO_ROOT / "KIWI_VERSION")
-        self.assertEqual(ver["MAJOR"], "159")
-        self.assertEqual(ver["BUILD"], "8144")
+        self.assertEqual(ver["MAJOR"], "160")
+        self.assertEqual(ver["BUILD"], "8157")
 
     def test_audit_overlay_counts_modified_dirs(self):
         report = audit_overlay(REPO_ROOT)
