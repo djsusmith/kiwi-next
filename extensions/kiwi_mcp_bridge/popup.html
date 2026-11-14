@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Kiwi MCP Bridge</title>
+  <style>
+    body { font-family: system-ui, sans-serif; width: 260px; padding: 12px; margin: 0; }
+    h1 { font-size: 14px; margin: 0 0 8px; }
+    .row { margin-bottom: 8px; font-size: 12px; }
+    input { width: 100%; box-sizing: border-box; padding: 4px; margin-top: 4px; }
+    button { width: 100%; padding: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Kiwi MCP Bridge</h1>
+  <div class="row">Status: <strong id="status">checking...</strong></div>
+  <div class="row">
+    <label for="wsUrl">Bridge WebSocket URL:</label>
+    <input id="wsUrl" type="text" placeholder="ws://127.0.0.1:9223" />
+  </div>
+  <button id="saveBtn">Save &amp; Reconnect</button>
+  <script src="popup.js"></script>
+</body>
+</html>
