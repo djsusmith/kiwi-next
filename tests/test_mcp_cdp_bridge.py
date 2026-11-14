@@ -27,5 +27,15 @@ class TestMcpCdpBridge(unittest.TestCase):
         self.assertIn("Usage:", res.stderr + res.stdout)
 
 
+    def test_help_includes_local_chromium_flag(self):
+        res = subprocess.run(
+            ["python3", str(REPO_ROOT / "scripts/mcp_cdp_bridge.py"), "--help"],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(res.returncode, 0)
+        self.assertIn("--local-chromium", res.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
