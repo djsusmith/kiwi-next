@@ -30,3 +30,8 @@ jspm_packages/
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+# Local git worktrees & test artifacts
+.worktrees/
+__pycache__/
+*.pyc
