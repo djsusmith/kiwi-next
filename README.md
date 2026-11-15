@@ -95,12 +95,27 @@ flowchart TD
 
 ---
 
+## 👥 Lead Maintainer & Credits
+
+<div align="center">
+
+### **Ahnaf Hasan Susmith**  
+*Lead Architect & Maintainer &bull; Kiwi Next Project*  
+📬 [susdj.96@gmail.com](mailto:susdj.96@gmail.com) &bull; 💻 [GitHub Profile](https://github.com/djsusmith)
+
+*Engineered, modernized, and revived in collaboration with **Antigravity** (Google DeepMind).*
+
+</div>
+
+---
+
 ## 🤝 Community & Contributing
 
-Kiwi Browser Reborn is an independent community revival project. We welcome code contributions, issue reports, and pull requests!
+Kiwi Next is an independent revival project led by **Ahnaf Hasan Susmith**. We welcome code contributions, issue reports, and pull requests!
 
 - 🌐 **Project Webpage:** [https://djsusmith.github.io/kiwi-next/](https://djsusmith.github.io/kiwi-next/)
 - 💻 **Source Code:** [https://github.com/djsusmith/kiwi-next](https://github.com/djsusmith/kiwi-next)
+- 📦 **Releases:** [https://github.com/djsusmith/kiwi-next/releases](https://github.com/djsusmith/kiwi-next/releases)
 - 📜 **License:** [Kiwi Browser & Chromium License](LICENSE)
 
-*Created with passion by the community to keep open-source mobile browser innovation alive.*
+*Created with passion by Ahnaf Hasan Susmith with Antigravity to keep open-source mobile browser innovation alive.*
