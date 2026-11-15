@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Outer Glow -->
+    <radialGradient id="cyberGlow" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.3"/>
+      <stop offset="60%" stop-color="#064E3B" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#090D16" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Ring Tech Gradient -->
+    <linearGradient id="neonRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+
+    <!-- Core Kiwi Fruit Gradient -->
+    <linearGradient id="kiwiCore" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="60%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#064E3B"/>
+    </linearGradient>
+
+    <!-- Center Heart Gradient -->
+    <radialGradient id="kiwiHeart" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="40%" stop-color="#A7F3D0"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </radialGradient>
+
+    <!-- Chrome Orbit Gradients -->
+    <linearGradient id="orbitYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+
+    <linearGradient id="orbitBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+
+    <linearGradient id="orbitRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F87171"/>
+      <stop offset="100%" stop-color="#DC2626"/>
+    </linearGradient>
+
+    <!-- Drop Shadow -->
+    <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow -->
+  <circle cx="256" cy="256" r="240" fill="url(#cyberGlow)"/>
+
+  <!-- Outer Cyber Ring -->
+  <circle cx="256" cy="256" r="226" fill="none" stroke="url(#neonRing)" stroke-width="6" opacity="0.8" stroke-dasharray="16 8"/>
+
+  <!-- Modern Outer Crust -->
+  <circle cx="256" cy="256" r="210" fill="#1C1917" stroke="#44403C" stroke-width="4"/>
+
+  <!-- Juicy Neon Kiwi Flesh -->
+  <circle cx="256" cy="256" r="196" fill="url(#kiwiCore)" filter="url(#glowFilter)"/>
+
+  <!-- Cyber Ray Pattern (Cross-section) -->
+  <g stroke="#34D399" stroke-width="2.5" opacity="0.4" stroke-linecap="round">
+    <line x1="256" y1="256" x2="256" y2="90"/>
+    <line x1="256" y1="256" x2="256" y2="422"/>
+    <line x1="256" y1="256" x2="90" y2="256"/>
+    <line x1="256" y1="256" x2="422" y2="256"/>
+    <line x1="256" y1="256" x2="138" y2="138"/>
+    <line x1="256" y1="256" x2="374" y2="374"/>
+    <line x1="256" y1="256" x2="374" y2="138"/>
+    <line x1="256" y1="256" x2="138" y2="374"/>
+    <line x1="256" y1="256" x2="300" y2="105"/>
+    <line x1="256" y1="256" x2="212" y2="407"/>
+    <line x1="256" y1="256" x2="407" y2="212"/>
+    <line x1="256" y1="256" x2="105" y2="300"/>
+    <line x1="256" y1="256" x2="212" y2="105"/>
+    <line x1="256" y1="256" x2="300" y2="407"/>
+    <line x1="256" y1="256" x2="105" y2="212"/>
+    <line x1="256" y1="256" x2="407" y2="300"/>
+  </g>
+
+  <!-- Futuristic Seed Ring (Orbiting Bits) -->
+  <g fill="#022C22">
+    <!-- Seeds as sleek angled capsules -->
+    <ellipse cx="256" cy="148" rx="5" ry="12" fill="#042F2E"/>
+    <ellipse cx="256" cy="364" rx="5" ry="12" fill="#042F2E"/>
+    <ellipse cx="148" cy="256" rx="12" ry="5" fill="#042F2E"/>
+    <ellipse cx="364" cy="256" rx="12" ry="5" fill="#042F2E"/>
+    <ellipse cx="180" cy="180" rx="6" ry="14" transform="rotate(-45 180 180)" fill="#042F2E"/>
+    <ellipse cx="332" cy="332" rx="6" ry="14" transform="rotate(-45 332 332)" fill="#042F2E"/>
+    <ellipse cx="332" cy="180" rx="6" ry="14" transform="rotate(45 332 180)" fill="#042F2E"/>
+    <ellipse cx="180" cy="332" rx="6" ry="14" transform="rotate(45 180 332)" fill="#042F2E"/>
+  </g>
+
+  <!-- Glowing Heart Core -->
+  <ellipse cx="256" cy="256" rx="65" ry="60" fill="url(#kiwiHeart)" filter="url(#glowFilter)"/>
+
+  <!-- Chrome & AI Convergence Arc Overlays -->
+  <path d="M 175 190 A 100 100 0 0 1 337 190" fill="none" stroke="url(#orbitRed)" stroke-width="12" stroke-linecap="round" opacity="0.95"/>
+  <path d="M 337 190 A 100 100 0 0 1 256 345" fill="none" stroke="url(#orbitYellow)" stroke-width="12" stroke-linecap="round" opacity="0.95"/>
+  <path d="M 256 345 A 100 100 0 0 1 175 190" fill="none" stroke="url(#orbitBlue)" stroke-width="12" stroke-linecap="round" opacity="0.95"/>
+
+  <!-- Central Nexus (AI / MCP Node) -->
+  <circle cx="256" cy="256" r="32" fill="#FFFFFF" filter="url(#glowFilter)"/>
+  <polygon points="256,236 272,256 256,276 240,256" fill="#10B981"/>
+</svg>
