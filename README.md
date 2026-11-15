@@ -9,16 +9,16 @@
 </p>
 
 <p align="center">
-  <a href="https://djsusmith.github.io/src.next/">
+  <a href="https://djsusmith.github.io/kiwi-next/">
     <img src="https://img.shields.io/badge/🌐_Website-Live_Site-8A2BE2?style=for-the-badge" alt="Official Website" />
   </a>
-  <a href="https://github.com/djsusmith/src.next/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/djsusmith/src.next/build_apk.yml?branch=kiwi&label=Build%20APK&style=for-the-badge&logo=github" alt="Build Status" />
+  <a href="https://github.com/djsusmith/kiwi-next/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/djsusmith/kiwi-next/build_apk.yml?branch=main&label=Build%20APK&style=for-the-badge&logo=github" alt="Build Status" />
   </a>
-  <a href="https://github.com/djsusmith/src.next/blob/kiwi/CHROMIUM_VERSION">
+  <a href="https://github.com/djsusmith/kiwi-next/blob/main/CHROMIUM_VERSION">
     <img src="https://img.shields.io/badge/Chromium-160%20Dev%20(160.0.8157.3)-0052CC?style=for-the-badge&logo=googlechrome" alt="Chromium 160" />
   </a>
-  <a href="https://github.com/djsusmith/src.next/tree/kiwi/extensions/kiwi_mcp_bridge">
+  <a href="https://github.com/djsusmith/kiwi-next/tree/main/extensions/kiwi_mcp_bridge">
     <img src="https://img.shields.io/badge/MCP-Native%20Bridge-10B981?style=for-the-badge&logo=anthropic" alt="MCP Bridge" />
   </a>
 </p>
@@ -99,8 +99,8 @@ flowchart TD
 
 Kiwi Browser Reborn is an independent community revival project. We welcome code contributions, issue reports, and pull requests!
 
-- 🌐 **Project Webpage:** [https://djsusmith.github.io/src.next/](https://djsusmith.github.io/src.next/)
-- 💻 **Source Code:** [https://github.com/djsusmith/src.next](https://github.com/djsusmith/src.next)
+- 🌐 **Project Webpage:** [https://djsusmith.github.io/kiwi-next/](https://djsusmith.github.io/kiwi-next/)
+- 💻 **Source Code:** [https://github.com/djsusmith/kiwi-next](https://github.com/djsusmith/kiwi-next)
 - 📜 **License:** [Kiwi Browser & Chromium License](LICENSE)
 
 *Created with passion by the community to keep open-source mobile browser innovation alive.*

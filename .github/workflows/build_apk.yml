@@ -80,8 +80,32 @@ jobs:
           autoninja -C out/KiwiArm64 chrome_public_apk
           cp out/KiwiArm64/apks/ChromePublic.apk "${GITHUB_WORKSPACE}/kiwi-arm64.apk"
 
-      - name: Upload Kiwi ARM64 APK
+      - name: Upload Kiwi ARM64 APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: kiwi-arm64-${{ steps.version.outputs.tag }}
           path: kiwi-arm64.apk
+
+      - name: Create GitHub Release with APK
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/heads/')
+        with:
+          tag_name: v${{ steps.version.outputs.tag }}
+          name: Kiwi Next v${{ steps.version.outputs.tag }}
+          body: |
+            ### 🥝 Kiwi Browser Next — Modernized Chromium 160 & MCP Edition
+            
+            - **Core Engine:** Upgraded to Chromium 160 Dev (`${{ steps.version.outputs.tag }}`)
+            - **Manifest V3 Desktop Extensions:** Native support on Android
+            - **Model Context Protocol (MCP):** Built-in `kiwi_mcp_bridge` for AI agents (ws://127.0.0.1:9223)
+            - **Architecture:** ARM64 (`aarch64`)
+            
+            Install on your phone directly or using Shizuku:
+            ```bash
+            bash scripts/deploy_shizuku.sh kiwi-arm64.apk
+            ```
+          files: kiwi-arm64.apk
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
