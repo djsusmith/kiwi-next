@@ -71,7 +71,11 @@ jobs:
           CHROMIUM_ROOT: ${{ inputs.chromium_workspace || '/opt/chromium' }}
         run: |
           cd "${CHROMIUM_ROOT}/src"
-          gn gen out/KiwiArm64
+          if ! gn gen out/KiwiArm64; then
+            echo "Fallback: removing enable_desktop_android_extensions if unsupported on this target..."
+            sed -i '/enable_desktop_android_extensions/d' out/KiwiArm64/args.gn
+            gn gen out/KiwiArm64
+          fi
           autoninja -C out/KiwiArm64 chrome_public_apk
           cp out/KiwiArm64/apks/ChromePublic.apk "${GITHUB_WORKSPACE}/kiwi-arm64.apk"
 

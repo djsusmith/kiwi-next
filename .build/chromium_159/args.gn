@@ -20,7 +20,8 @@ proprietary_codecs = true
 enable_widevine = true
 
 v8_use_external_startup_data = true
-enable_extensions = true
+# Chromium 160 uses enable_desktop_android_extensions on Android instead of desktop enable_extensions = true
+enable_desktop_android_extensions = true
 enable_pdf = false
 enable_plugins = false
 
