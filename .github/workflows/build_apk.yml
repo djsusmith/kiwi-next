@@ -17,6 +17,7 @@ concurrency: build_test_apk
 jobs:
   build:
     runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 1440
 
     steps:
       - name: Checkout Kiwi overlay
