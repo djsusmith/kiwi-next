@@ -30,8 +30,10 @@ jobs:
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "Target Chromium tag: ${TAG}"
 
-      - name: Ensure depot_tools is available
+      - name: Ensure depot_tools and host dependencies are available
         run: |
+          sudo apt-get update
+          sudo apt-get install -y git curl rsync python3 build-essential pkg-config libglib2.0-dev libnss3 libxcb1 libx11-6 libxext6 libxi6 libxrender1 libxtst6
           if [ ! -d "$HOME/depot_tools" ]; then
             git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git "$HOME/depot_tools"
           fi
@@ -48,20 +50,19 @@ jobs:
             fetch --nohooks android
           fi
           cd src
+          git reset --hard
+          git clean -fd
           git fetch origin "refs/tags/${TARGET_TAG}:refs/tags/${TARGET_TAG}"
           git checkout -f "tags/${TARGET_TAG}"
           gclient sync -D --with_branch_heads --with_tags
 
-      - name: Overlay Kiwi Browser & MCP Bridge files
+      - name: Overlay Kiwi MCP Bridge & GN config
         env:
           CHROMIUM_ROOT: ${{ inputs.chromium_workspace || '/opt/chromium' }}
         run: |
           python3 scripts/audit_chromium_overlay.py --json
-          for dir in base chrome components content extensions net remoting services third_party ui; do
-            if [ -d "$dir" ]; then
-              rsync -a "${dir}/" "${CHROMIUM_ROOT}/src/${dir}/"
-            fi
-          done
+          mkdir -p "${CHROMIUM_ROOT}/src/extensions/kiwi_mcp_bridge"
+          cp -r extensions/kiwi_mcp_bridge/* "${CHROMIUM_ROOT}/src/extensions/kiwi_mcp_bridge/"
           mkdir -p "${CHROMIUM_ROOT}/src/out/KiwiArm64"
           cp .build/chromium_159/args.gn "${CHROMIUM_ROOT}/src/out/KiwiArm64/args.gn"
 
