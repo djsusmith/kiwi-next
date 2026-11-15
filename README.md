@@ -2,133 +2,105 @@
   <img src="kiwi_logo_circle.svg" alt="Kiwi Browser Next Gen" title="Kiwi Browser Next" width="160" height="160" />
 </p>
 
-<h1 align="center">Kiwi Browser Next &middot; MCP Edition</h1>
+<h1 align="center">🥝 Kiwi Browser: Reborn</h1>
 
 <p align="center">
-  <b>Modernized Chromium 160 Core &bull; Native Model Context Protocol (MCP) Integration &bull; Desktop Extensions on Android</b>
+  <b>The browser that brought desktop extensions to Android is back &mdash; upgraded, modernized, and supercharged with Native AI Agent Tools.</b>
 </p>
 
 <p align="center">
+  <a href="https://djsusmith.github.io/src.next/">
+    <img src="https://img.shields.io/badge/🌐_Website-Live_Site-8A2BE2?style=for-the-badge" alt="Official Website" />
+  </a>
   <a href="https://github.com/djsusmith/src.next/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/djsusmith/src.next/build_apk.yml?branch=kiwi&label=Build%20APK&style=flat-square" alt="Build Status" />
+    <img src="https://img.shields.io/github/actions/workflow/status/djsusmith/src.next/build_apk.yml?branch=kiwi&label=Build%20APK&style=for-the-badge&logo=github" alt="Build Status" />
   </a>
   <a href="https://github.com/djsusmith/src.next/blob/kiwi/CHROMIUM_VERSION">
-    <img src="https://img.shields.io/badge/Chromium-160%20Dev%20(160.0.8157.3)-blue?style=flat-square" alt="Chromium 160" />
+    <img src="https://img.shields.io/badge/Chromium-160%20Dev%20(160.0.8157.3)-0052CC?style=for-the-badge&logo=googlechrome" alt="Chromium 160" />
   </a>
   <a href="https://github.com/djsusmith/src.next/tree/kiwi/extensions/kiwi_mcp_bridge">
-    <img src="https://img.shields.io/badge/MCP-Integrated%20Bridge-emerald?style=flat-square" alt="MCP Bridge" />
-  </a>
-  <a href="https://github.com/djsusmith/src.next/blob/kiwi/LICENSE">
-    <img src="https://img.shields.io/github/license/djsusmith/src.next?style=flat-square&color=6BDDD5" alt="License" />
+    <img src="https://img.shields.io/badge/MCP-Native%20Bridge-10B981?style=for-the-badge&logo=anthropic" alt="MCP Bridge" />
   </a>
 </p>
 
 ---
 
-## 🌟 What is Kiwi Browser Next?
+## 🔥 We Picked Up the Torch
 
-**Kiwi Browser Next** resurrects the legendary Android browser that first brought desktop Chrome extensions to mobile devices. This fork upgrades the underlying engine to **Chromium 160 Dev (`160.0.8157.3`)** and embeds **Model Context Protocol (MCP)** tool capabilities directly into the mobile browsing experience.
+When Kiwi Browser was officially archived in early 2025, mobile power users and developers lost the pioneer that first proved Android could run full desktop extensions.
 
-### ⚡ Key Features
+**We refused to let Kiwi die.**
 
-- 🚀 **Chromium 160 Dev Engine:** Upgraded modern Blink rendering engine, V8 performance improvements, and current security patches.
-- 🤖 **Model Context Protocol (MCP) Bridge:** Built-in MV3 extension & socket bridge allowing AI coding agents (Antigravity, Claude, Cursor) to automate tabs, inspect DOM, evaluate JavaScript, and capture screenshots.
-- 🧩 **Desktop Chrome Extensions:** Native Android support for Manifest V3 desktop extensions and developer sideloading.
-- 📱 **Shizuku Elevated Deployment:** Streamlined installation, live remote debugging socket forwarding, and package management via ADB/Shizuku (`rish`).
-- 🛠️ **Automated CI/CD Pipeline:** Fully reproducible GitHub Actions workflow using Google Chromium `depot_tools` for ARM64 Android (`chrome_public_apk`).
+We restarted the project from the ground up:
+1. **Engine Modernization:** Upgraded the stale core all the way to **Chromium 160 Dev (`160.0.8157.3`)** with current Blink, V8 engine optimizations, and hardware acceleration.
+2. **AI Era Integration:** Added first-class **Model Context Protocol (MCP)** tool bridge support, giving modern autonomous AI coding assistants (Antigravity, Claude, Cursor) programmatic control to inspect web pages, evaluate scripts, automate testing, and capture high-res viewports.
+3. **Open & Reproducible:** Replaced proprietary black-box compile servers with a fully transparent, reproducible **GitHub Actions + `depot_tools`** build system.
 
 ---
 
-## 🏗️ Architecture
+## ✨ Features at a Glance
+
+### 🚀 Cutting-Edge Chromium 160 Core
+Enjoy modern web standards, improved memory management on high-refresh Android flagships, and zero legacy vulnerabilities.
+
+### 🧩 True Desktop Extensions (Manifest V3)
+Install extensions directly from developer source directories, `.crx`, or unpacked folders on your mobile device.
+
+### 🤖 Model Context Protocol (MCP) Bridge
+Built-in `kiwi_mcp_bridge` turns your phone into an autonomous web testing and scraping environment for AI agents.
+
+| MCP Tool | Capability |
+| :--- | :--- |
+| `list_tabs` | Query all active/background tabs, URLs, and titles |
+| `navigate` | Send tabs to target URLs automatically |
+| `eval_js` | Execute client-side JavaScript in page context |
+| `capture_screenshot` | Grab pristine PNG viewport captures |
+
+### ⚡ Shizuku / ADB Elevated Deployment
+Cleanly deploy, install, launch, and expose DevTools sockets over ADB/Shizuku without requiring root:
+```bash
+# Install and launch directly on device
+bash scripts/deploy_shizuku.sh path/to/kiwi-arm64.apk
+```
+
+---
+
+## 🏛️ System Architecture
 
 ```mermaid
 flowchart TD
-    subgraph Host["Building (x86_64 Host / EC2 Runner)"]
+    subgraph Build["Cloud / Self-Hosted x86_64 Runner"]
         direction TB
-        DT[depot_tools + gclient] --> CR[Chromium 160 Source Tree]
-        KW[Kiwi Overlay + GN Config] --> CR
-        MCP_EXT[Kiwi MCP Bridge MV3 Extension] --> CR
-        CR --> NINJA[autoninja -C out/KiwiArm64 chrome_public_apk]
-        NINJA --> APK[kiwi-arm64.apk]
+        UP[Chromium 160.0.8157.3 Core] --> GN[Kiwi Custom GN Flags]
+        MCP_EXT[Kiwi MCP Bridge MV3 Extension] --> GN
+        GN --> COMP[autoninja -C out/KiwiArm64 chrome_public_apk]
+        COMP --> OUT[Signed kiwi-arm64.apk]
     end
 
-    subgraph Android["Runtime (Android Device)"]
-        APK -->|Shizuku / rish deploy| APP[Kiwi Browser Next 160]
-        APP --> EXT[Embedded Kiwi MCP Bridge]
-        EXT <-->|WebSocket ws://127.0.0.1:9223| AGENT[Antigravity / AI Agent]
-        APP -.->|CDP Socket @chrome_devtools_remote| BRIDGE[mcp_cdp_bridge.py]
-        BRIDGE <-->|HTTP/CDP 127.0.0.1:9222| AGENT
+    subgraph Phone["Android Device Execution"]
+        OUT -->|Shizuku pm install| APP[🥝 Kiwi Browser Reborn]
+        APP --> EXT[Integrated MCP MV3 Extension]
+        EXT <-->|WebSocket ws://127.0.0.1:9223| AI[Antigravity / AI Agent]
+        APP -.->|CDP Socket @chrome_devtools_remote| SOC[mcp_cdp_bridge.py]
+        SOC <-->|HTTP CDP 127.0.0.1:9222| AI
     end
 ```
 
 ---
 
-## 🧩 Built-in MCP Tools Integration
+## 📦 Getting the APK
 
-Kiwi Browser Next comes with a dedicated **Manifest V3 MCP Bridge** located at [`extensions/kiwi_mcp_bridge/`](extensions/kiwi_mcp_bridge/).
-
-### Supported Agent Actions
-
-| MCP Tool | Description |
-| :--- | :--- |
-| `list_tabs` | Query all open browser tabs, active states, URLs, and titles |
-| `navigate` | Direct a tab (or active tab) to any URL |
-| `eval_js` | Safely evaluate client-side JavaScript in page context |
-| `capture_screenshot`| Capture high-resolution viewport PNGs of the active tab |
-
-### Loading the Extension Manually
-1. Open Kiwi Browser and navigate to `chrome://extensions`.
-2. Toggle on **Developer mode** in the top right corner.
-3. Tap **+(from .zip / .crx / user dir)** or **Load unpacked** and select the [`extensions/kiwi_mcp_bridge/`](extensions/kiwi_mcp_bridge/) folder.
-4. The bridge will automatically connect to your local agent at `ws://127.0.0.1:9223`.
+1. **GitHub Releases & Artifacts:** Visit our [Actions Workflow](https://github.com/djsusmith/src.next/actions) to download the latest automated `kiwi-arm64.apk` builds.
+2. **Build It Yourself:** Run the reproducible pipeline using your own runner and [`.github/workflows/build_apk.yml`](.github/workflows/build_apk.yml).
 
 ---
 
-## 🚀 Building & Deployment
+## 🤝 Community & Contributing
 
-### Automated GitHub Actions Workflow
-The repository includes a battle-tested GitHub Actions workflow at [`.github/workflows/build_apk.yml`](.github/workflows/build_apk.yml).
+Kiwi Browser Reborn is an independent community revival project. We welcome code contributions, issue reports, and pull requests!
 
-To trigger a build:
-1. Connect a self-hosted `x86_64` Linux runner (e.g. AWS EC2 `m6i.4xlarge`, 64 GB RAM, 200 GB SSD).
-2. Go to **Actions** &rarr; **Build Kiwi Browser APK (Chromium 160 Dev ARM64)**.
-3. Click **Run workflow**. The resulting signed APK will be uploaded to artifacts.
+- 🌐 **Project Webpage:** [https://djsusmith.github.io/src.next/](https://djsusmith.github.io/src.next/)
+- 💻 **Source Code:** [https://github.com/djsusmith/src.next](https://github.com/djsusmith/src.next)
+- 📜 **License:** [Kiwi Browser & Chromium License](LICENSE)
 
-### Installing with Shizuku (`rish`)
-If you have Shizuku running on your Android device:
-
-```bash
-# Sideload the APK and launch immediately
-bash scripts/deploy_shizuku.sh path/to/kiwi-arm64.apk
-
-# Or cleanly remove existing version first
-bash scripts/deploy_shizuku.sh --uninstall-previous path/to/kiwi-arm64.apk
-```
-
----
-
-## 📂 Project Structure
-
-```text
-├── .build/
-│   └── chromium_159/args.gn        # GN compilation arguments (ARM64, extensions enabled)
-├── .github/workflows/
-│   └── build_apk.yml               # depot_tools Chromium 160 build workflow
-├── extensions/
-│   └── kiwi_mcp_bridge/            # Built-in MV3 MCP Tool bridge extension
-├── scripts/
-│   ├── audit_chromium_overlay.py   # Overlay directory auditor
-│   ├── deploy_shizuku.sh           # Shizuku APK installer & launcher
-│   └── mcp_cdp_bridge.py           # CDP abstract UNIX socket to TCP forwarder
-├── tests/                          # Automated unit & integration tests
-├── CHROMIUM_VERSION                # Upstream target version (160.0.8157.3)
-└── KIWI_VERSION                    # Kiwi release version (160.0.8157.3)
-```
-
----
-
-## ⚖️ License & Acknowledgments
-
-- Kiwi Browser code is licensed under the terms described in the [LICENSE](LICENSE) file.
-- Chromium code is copyright The Chromium Authors and licensed under the BSD License.
-- Originating work by Arnaud Granal and the Kiwi Browser community.
+*Created with passion by the community to keep open-source mobile browser innovation alive.*
