@@ -1,4 +1,4 @@
-name: 'Build Kiwi Browser APK (Chromium 159 ARM64)'
+name: 'Build Kiwi Browser APK (Chromium 160 Dev ARM64)'
 
 on:
   pull_request:
