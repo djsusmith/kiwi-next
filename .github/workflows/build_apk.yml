@@ -57,11 +57,12 @@ jobs:
           git checkout -f "tags/${TARGET_TAG}"
           gclient sync -D --with_branch_heads --with_tags
 
-      - name: Overlay Kiwi MCP Bridge & GN config
+      - name: Overlay Kiwi Patches, MCP Bridge & GN config
         env:
           CHROMIUM_ROOT: ${{ inputs.chromium_workspace || '/opt/chromium' }}
         run: |
           python3 scripts/audit_chromium_overlay.py --json
+          python3 scripts/apply_kiwi_160_patches.py --chromium-src "${CHROMIUM_ROOT}/src"
           mkdir -p "${CHROMIUM_ROOT}/src/extensions/kiwi_mcp_bridge"
           cp -r extensions/kiwi_mcp_bridge/* "${CHROMIUM_ROOT}/src/extensions/kiwi_mcp_bridge/"
           mkdir -p "${CHROMIUM_ROOT}/src/out/KiwiArm64"

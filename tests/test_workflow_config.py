@@ -17,7 +17,9 @@ class TestWorkflowConfig(unittest.TestCase):
         gn = (REPO_ROOT / ".build/chromium_159/args.gn").read_text(encoding="utf-8")
         self.assertIn('target_os = "android"', gn)
         self.assertIn('target_cpu = "arm64"', gn)
-        self.assertIn("enable_extensions = true", gn)
+        self.assertIn("is_desktop_android = true", gn)
+        self.assertIn("enable_desktop_android_extensions = true", gn)
+        self.assertIn('chrome_public_manifest_package = "com.kiwibrowser.next"', gn)
 
 
 if __name__ == "__main__":

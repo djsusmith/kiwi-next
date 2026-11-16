@@ -11,16 +11,17 @@ symbol_level = 0
 blink_symbol_level = 0
 v8_symbol_level = 0
 
-android_channel = "dev"
+android_channel = "default"
+chrome_public_manifest_package = "com.kiwibrowser.next"
 android_default_version_code = "815700003"
-android_default_version_name = "160.0.8157.3-kiwi-mcp"
+android_default_version_name = "160.0.8157.3-kiwi-next"
 
 ffmpeg_branding = "Chrome"
 proprietary_codecs = true
 enable_widevine = true
 
 v8_use_external_startup_data = true
-# Chromium 160 uses enable_desktop_android_extensions on Android instead of desktop enable_extensions = true
+is_desktop_android = true
 enable_desktop_android_extensions = true
 enable_pdf = false
 enable_plugins = false
