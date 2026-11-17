@@ -165,9 +165,11 @@ def patch_branding(chromium_src: Path, overlay_root: Path) -> list[str]:
     for res_dir in ("res_chromium_base", "res_chromium"):
         src_dir = overlay_root / "chrome/android/java" / res_dir
         dst_dir = chromium_src / "chrome/android/java" / res_dir
-        if src_dir.exists() and dst_dir.exists():
+        if src_dir.exists() and dst_dir.exists() and src_dir.resolve() != dst_dir.resolve():
             shutil.copytree(src_dir, dst_dir, dirs_exist_ok=True)
             results.append(f"applied:icons_{res_dir}")
+        else:
+            results.append(f"already:icons_{res_dir}")
     return results
 
 
