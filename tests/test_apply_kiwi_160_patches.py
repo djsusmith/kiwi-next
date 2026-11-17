@@ -81,6 +81,26 @@ class TestApplyKiwi160Patches(unittest.TestCase):
             encoding="utf-8",
         )
 
+        toolbar_manager = (
+            root
+            / "chrome/android/java/src/org/chromium/chrome/browser/toolbar/ToolbarManager.java"
+        )
+        toolbar_manager.parent.mkdir(parents=True, exist_ok=True)
+        toolbar_manager.write_text(
+            "                    (ToolbarTablet) mToolbarLayout,\n",
+            encoding="utf-8",
+        )
+
+        channel_constants = (
+            root
+            / "chrome/android/java/res_chromium_base/values/channel_constants.xml"
+        )
+        channel_constants.parent.mkdir(parents=True, exist_ok=True)
+        channel_constants.write_text(
+            '<string name="app_name" translatable="false">Chromium</string>\n',
+            encoding="utf-8",
+        )
+
         (root / "chrome/android/java/res_chromium_base/mipmap-xxxhdpi").mkdir(
             parents=True, exist_ok=True
         )

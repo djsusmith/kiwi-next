@@ -145,6 +145,22 @@ def patch_dark_mode_amoled(chromium_src: Path) -> str:
     )
 
 
+def patch_toolbar_manager(chromium_src: Path) -> str:
+    """Fix ClassCastException on phones by replacing (ToolbarTablet) cast with ViewGroup."""
+    target = (
+        chromium_src
+        / "chrome/android/java/src/org/chromium/chrome/browser/toolbar/ToolbarManager.java"
+    )
+    marker = "(ViewGroup) mToolbarLayout"
+    return _patch_text(
+        target,
+        marker,
+        r"\(ToolbarTablet\) mToolbarLayout,",
+        "(ViewGroup) mToolbarLayout,",
+        "toolbar_manager_phone_root_view_cast",
+    )
+
+
 def patch_branding(chromium_src: Path, overlay_root: Path) -> list[str]:
     """Overlay Kiwi icons and update Chromium product name strings to Kiwi Next."""
     results = []
@@ -162,6 +178,23 @@ def patch_branding(chromium_src: Path, overlay_root: Path) -> list[str]:
         else:
             results.append("already:product_name_strings")
 
+    channel_constants = (
+        chromium_src
+        / "chrome/android/java/res_chromium_base/values/channel_constants.xml"
+    )
+    if channel_constants.exists():
+        content = channel_constants.read_text(encoding="utf-8")
+        if "Kiwi Next" not in content:
+            updated = re.sub(
+                r'<string name="app_name"[^>]*>[^<]+</string>',
+                '<string name="app_name" translatable="false">Kiwi Next</string>',
+                content,
+            )
+            channel_constants.write_text(updated, encoding="utf-8")
+            results.append("applied:channel_constants_app_name")
+        else:
+            results.append("already:channel_constants_app_name")
+
     for res_dir in ("res_chromium_base", "res_chromium"):
         src_dir = overlay_root / "chrome/android/java" / res_dir
         dst_dir = chromium_src / "chrome/android/java" / res_dir
@@ -177,6 +210,7 @@ def apply_all(chromium_src: Path, overlay_root: Path) -> list[str]:
     """Apply all Kiwi-on-Chromium-160 patches cleanly."""
     results: list[str] = []
     results.append(patch_toolbar_phone(chromium_src))
+    results.append(patch_toolbar_manager(chromium_src))
     results.extend(patch_app_menu_delegate_impl(chromium_src))
     results.append(patch_tabbed_app_menu(chromium_src))
     results.append(patch_chrome_tabbed_activity(chromium_src))
