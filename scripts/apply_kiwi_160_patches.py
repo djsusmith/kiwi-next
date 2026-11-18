@@ -200,7 +200,7 @@ def patch_devtools_open_as_tab(chromium_src: Path) -> list[str]:
                 '#include "chrome/android/chrome_jni_headers/DevToolsActivity_jni.h"\n'
                 '#include "chrome/browser/ui/android/tab_model/tab_model.h"\n'
                 '#include "chrome/browser/ui/android/tab_model/tab_model_list.h"\n'
-                '#include "content/public/browser/child_process_importance.h"',
+                '#include "content/public/browser/android/child_process_importance.h"',
                 "devtools_window_tab_model_includes",
             )
         )
