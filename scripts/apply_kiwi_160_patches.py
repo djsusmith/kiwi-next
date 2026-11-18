@@ -973,6 +973,115 @@ def patch_toolbar_manager(chromium_src: Path) -> str:
     )
 
 
+def patch_devtools_tcp_server_android(chromium_src: Path) -> list[str]:
+    """Bind DevToolsServer on 127.0.0.1:9222 so chrome://inspect/#remote-debugging and MCP work."""
+    results = []
+    server_cc = chromium_src / "chrome/browser/android/devtools_server.cc"
+    if server_cc.exists():
+        results.append(
+            _patch_text(
+                server_cc,
+                '#include "net/socket/tcp_server_socket.h"',
+                r'#include "net/socket/unix_domain_server_socket_posix\.h"',
+                '#include "net/log/net_log_source.h"\n'
+                '#include "net/socket/tcp_server_socket.h"\n'
+                '#include "net/socket/unix_domain_server_socket_posix.h"',
+                "devtools_server_tcp_includes",
+            )
+        )
+        results.append(
+            _patch_text(
+                server_cc,
+                "// Kiwi Next: bind TCP 127.0.0.1:9222 for local MCP and chrome://inspect/#remote-debugging",
+                r"  std::unique_ptr<net::ServerSocket> CreateForHttpServer\(\) override \{\n"
+                r"    std::unique_ptr<net::UnixDomainServerSocket> socket\(\n"
+                r"        new net::UnixDomainServerSocket\(auth_callback_,\n"
+                r"                                        true /\* use_abstract_namespace \*/\)\);",
+                "  std::unique_ptr<net::ServerSocket> CreateForHttpServer() override {\n"
+                "    // Kiwi Next: bind TCP 127.0.0.1:9222 for local MCP and chrome://inspect/#remote-debugging\n"
+                "    std::unique_ptr<net::ServerSocket> tcp_socket(\n"
+                "        new net::TCPServerSocket(nullptr, net::NetLogSource()));\n"
+                "    if (tcp_socket->ListenWithAddressAndPort(\"127.0.0.1\", 9222, kBackLog) ==\n"
+                "        net::OK) {\n"
+                "      return tcp_socket;\n"
+                "    }\n"
+                "    if (tcp_socket->ListenWithAddressAndPort(\"127.0.0.1\", 0, kBackLog) ==\n"
+                "        net::OK) {\n"
+                "      return tcp_socket;\n"
+                "    }\n"
+                "    std::unique_ptr<net::UnixDomainServerSocket> socket(\n"
+                "        new net::UnixDomainServerSocket(auth_callback_,\n"
+                "                                        true /* use_abstract_namespace */));",
+                "devtools_server_create_tcp_9222",
+            )
+        )
+        results.append(
+            _patch_text(
+                server_cc,
+                "// Kiwi Next: allow local WebSocket origins on 127.0.0.1:9222",
+                r"void DevToolsServer::Start\(bool allow_debug_permission\) \{\n"
+                r"  if \(is_started_\)\n"
+                r"    return;",
+                "void DevToolsServer::Start(bool allow_debug_permission) {\n"
+                "  if (is_started_)\n"
+                "    return;\n"
+                "  // Kiwi Next: allow local WebSocket origins on 127.0.0.1:9222\n"
+                "  base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();\n"
+                "  if (!command_line->HasSwitch(switches::kRemoteAllowOrigins)) {\n"
+                "    command_line->AppendSwitchASCII(switches::kRemoteAllowOrigins, \"*\");\n"
+                "  }",
+                "devtools_server_allow_origins",
+            )
+        )
+
+    inspect_ui_cc = chromium_src / "chrome/browser/ui/webui/inspect/inspect_ui.cc"
+    if inspect_ui_cc.exists():
+        results.append(
+            _patch_text(
+                inspect_ui_cc,
+                "// Kiwi Next: report active Android DevTools TCP server address",
+                r"void InspectUI::UpdateRemoteDebuggingEnabled\(\) \{\n"
+                r"  if \(!base::FeatureList::IsEnabled\(\n"
+                r"          features::kDevToolsAcceptDebuggingConnections\)\) \{\n"
+                r"    web_ui\(\)->CallJavascriptFunctionUnsafe\(\"updateRemoteDebuggingEnabled\",\n"
+                r"                                           /\*enabled=\*/false, /\*allowed=\*/false,\n"
+                r"                                           /\*hidden=\*/true, /\*address=\*/\"\"\);\n"
+                r"    return;\n"
+                r"  \}\n"
+                r"  PrefService\* local_state = g_browser_process->local_state\(\);\n"
+                r"  const PrefService::Preference\* pref =\n"
+                r"      local_state->FindPreference\(prefs::kDevToolsRemoteDebuggingEnabled\);\n"
+                r"  bool allowed =\n"
+                r"      local_state->GetBoolean\(prefs::kDevToolsRemoteDebuggingAllowed\);\n"
+                r"  bool enabled = allowed && pref->GetValue\(\)->GetBool\(\);\n"
+                r"  std::string address;\n"
+                r"  if \(enabled\) \{\n"
+                r"    address = content::DevToolsAgentHost::GetRemoteDebuggingServerAddress\(\);\n"
+                r"  \}\n"
+                r"  web_ui\(\)->CallJavascriptFunctionUnsafe\(\"updateRemoteDebuggingEnabled\",\n"
+                r"                                         enabled, allowed, false, address\);\n"
+                r"\}",
+                "void InspectUI::UpdateRemoteDebuggingEnabled() {\n"
+                "  // Kiwi Next: report active Android DevTools TCP server address\n"
+                "  std::string address =\n"
+                "      content::DevToolsAgentHost::GetRemoteDebuggingServerAddress();\n"
+                "  if (address.empty()) {\n"
+                "    address = \"127.0.0.1:9222\";\n"
+                "  }\n"
+                "  PrefService* local_state = g_browser_process->local_state();\n"
+                "  const PrefService::Preference* pref =\n"
+                "      local_state->FindPreference(prefs::kDevToolsRemoteDebuggingEnabled);\n"
+                "  bool allowed = true;\n"
+                "  bool enabled = (pref && pref->GetValue()->GetBool()) || !address.empty();\n"
+                "  web_ui()->CallJavascriptFunctionUnsafe(\"updateRemoteDebuggingEnabled\",\n"
+                "                                         enabled, allowed, false, address);\n"
+                "}",
+                "inspect_ui_update_remote_debugging_address",
+            )
+        )
+    return results
+
+
 def patch_branding(chromium_src: Path, overlay_root: Path) -> list[str]:
     """Overlay Kiwi icons and update Chromium product name strings to Kiwi Next."""
     results = []
@@ -994,6 +1103,15 @@ def patch_branding(chromium_src: Path, overlay_root: Path) -> list[str]:
         src_dir = overlay_root / "chrome/android/java" / res_dir
         dst_dir = chromium_src / "chrome/android/java" / res_dir
         if src_dir.exists() and dst_dir.exists() and src_dir.resolve() != dst_dir.resolve():
+            src_fg = src_dir / "mipmap-xxxhdpi/ic_foreground.png"
+            dst_layered = dst_dir / "mipmap-xxxhdpi/layered_app_icon.png"
+            if (
+                src_fg.exists()
+                and dst_layered.exists()
+                and src_fg.stat().st_size == dst_layered.stat().st_size
+            ):
+                results.append(f"already:icons_{res_dir}")
+                continue
             shutil.copytree(src_dir, dst_dir, dirs_exist_ok=True)
             for mipmap_dir in dst_dir.glob("mipmap-*"):
                 fg = mipmap_dir / "ic_foreground.png"
@@ -1040,6 +1158,7 @@ def apply_all(chromium_src: Path, overlay_root: Path) -> list[str]:
     results.extend(patch_devtools_android(chromium_src))
     results.extend(patch_devtools_open_as_tab(chromium_src))
     results.extend(patch_inspect_webui_android(chromium_src))
+    results.extend(patch_devtools_tcp_server_android(chromium_src))
     results.extend(patch_branding(chromium_src, overlay_root))
     return results
 
