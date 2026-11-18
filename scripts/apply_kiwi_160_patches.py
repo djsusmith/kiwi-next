@@ -230,8 +230,10 @@ def patch_branding(chromium_src: Path, overlay_root: Path) -> list[str]:
                 bg = mipmap_dir / "ic_background.png"
                 if fg.exists():
                     shutil.copy2(fg, mipmap_dir / "layered_app_icon.png")
+                    fg.unlink()
                 if bg.exists():
                     shutil.copy2(bg, mipmap_dir / "layered_app_icon_background.png")
+                    bg.unlink()
             results.append(f"applied:icons_{res_dir}")
         else:
             results.append(f"already:icons_{res_dir}")
