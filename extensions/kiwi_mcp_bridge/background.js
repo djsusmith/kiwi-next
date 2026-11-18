@@ -8,6 +8,38 @@ async function getWsUrl() {
   return data.wsUrl;
 }
 
+const attachedTabs = new Set();
+
+async function ensureDebuggerAttached(tabId) {
+  if (attachedTabs.has(tabId)) return;
+  try {
+    await chrome.debugger.attach({ tabId }, "1.3");
+    attachedTabs.add(tabId);
+  } catch (err) {
+    if (!String(err?.message || err).includes("Already attached")) {
+      throw err;
+    }
+    attachedTabs.add(tabId);
+  }
+}
+
+chrome.debugger?.onDetach?.addListener((source) => {
+  if (source?.tabId) attachedTabs.delete(source.tabId);
+});
+
+chrome.debugger?.onEvent?.addListener((source, method, params) => {
+  if (socket && socket.readyState === WebSocket.OPEN && source?.tabId) {
+    socket.send(
+      JSON.stringify({
+        type: "cdp_event",
+        tabId: source.tabId,
+        method,
+        params,
+      })
+    );
+  }
+});
+
 async function handleToolCall(msg) {
   const { id, method, params = {} } = msg;
   try {
@@ -29,17 +61,48 @@ async function handleToolCall(msg) {
         result = { id: updated.id, url: updated.url };
         break;
       }
+      case "new_tab": {
+        const created = await chrome.tabs.create({
+          url: params.url || "about:blank",
+          active: params.active ?? true,
+        });
+        result = { id: created.id, url: created.url, title: created.title };
+        break;
+      }
+      case "close_tab": {
+        const tabId = params.tabId ?? (await getActiveTabId());
+        await chrome.tabs.remove(tabId);
+        result = { closed: tabId };
+        break;
+      }
       case "eval_js": {
         const tabId = params.tabId ?? (await getActiveTabId());
-        const execResults = await chrome.scripting.executeScript({
-          target: { tabId },
-          func: (code) => {
-            // eslint-disable-next-line no-eval
-            return eval(code);
-          },
-          args: [params.code || "null"],
-        });
-        result = execResults[0]?.result ?? null;
+        await ensureDebuggerAttached(tabId);
+        const evalRes = await chrome.debugger.sendCommand(
+          { tabId },
+          "Runtime.evaluate",
+          {
+            expression: params.code || "null",
+            returnByValue: true,
+            awaitPromise: true,
+          }
+        );
+        if (evalRes?.exceptionDetails) {
+          throw new Error(
+            evalRes.exceptionDetails.text || "JS evaluation exception"
+          );
+        }
+        result = evalRes?.result?.value ?? null;
+        break;
+      }
+      case "cdp_send": {
+        const tabId = params.tabId ?? (await getActiveTabId());
+        await ensureDebuggerAttached(tabId);
+        result = await chrome.debugger.sendCommand(
+          { tabId },
+          params.cdpMethod,
+          params.cdpParams || {}
+        );
         break;
       }
       case "capture_screenshot": {
