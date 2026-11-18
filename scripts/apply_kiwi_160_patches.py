@@ -587,7 +587,11 @@ def patch_inspect_webui_android(chromium_src: Path) -> list[str]:
                 r"      DevToolsAndroidBridge::Factory::GetForProfile\(profile_\);\n"
                 r"  if \(android_bridge\)\n"
                 r"    android_bridge->RemovePortForwardingListener\(this\);\n"
-                r"\}",
+                r"\}\n\n"
+                r"void PortForwardingStatusSerializer::PortStatusChanged\(\n"
+                r"    const ForwardingStatus& status\) \{\n"
+                r"  base::DictValue result;\n"
+                r"  for \(const auto& status_pair : status\) \{",
                 "// Kiwi Next: guard PortForwardingStatusSerializer on Android\n"
                 "PortForwardingStatusSerializer::PortForwardingStatusSerializer(\n"
                 "    const Callback& callback, Profile* profile)\n"
@@ -607,8 +611,28 @@ def patch_inspect_webui_android(chromium_src: Path) -> list[str]:
                 "  if (android_bridge)\n"
                 "    android_bridge->RemovePortForwardingListener(this);\n"
                 "#endif\n"
-                "}",
+                "}\n\n"
+                "void PortForwardingStatusSerializer::PortStatusChanged(\n"
+                "    const ForwardingStatus& status) {\n"
+                "  base::DictValue result;\n"
+                "#if !BUILDFLAG(IS_ANDROID)\n"
+                "  for (const auto& status_pair : status) {",
                 "devtools_targets_ui_port_forwarding",
+            )
+        )
+        results.append(
+            _patch_text(
+                targets_ui_cc,
+                "// Kiwi Next: end PortStatusChanged guard",
+                r"    result\.Set\(device_id, std::move\(device_status_dict\)\);\n"
+                r"  \}\n"
+                r"  callback_\.Run\(base::Value\(std::move\(result\)\)\);",
+                "    result.Set(device_id, std::move(device_status_dict));\n"
+                "  }\n"
+                "#endif\n"
+                "  // Kiwi Next: end PortStatusChanged guard\n"
+                "  callback_.Run(base::Value(std::move(result)));",
+                "devtools_targets_ui_port_status_end",
             )
         )
 
