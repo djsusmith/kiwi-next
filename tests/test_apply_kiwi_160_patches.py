@@ -105,6 +105,35 @@ class TestApplyKiwi160Patches(unittest.TestCase):
             parents=True, exist_ok=True
         )
 
+        channel_logo = root / "chrome/browser/ui/webui/current_channel_logo.cc"
+        channel_logo.parent.mkdir(parents=True, exist_ok=True)
+        channel_logo.write_text(
+            "    case version_info::Channel::STABLE:\n"
+            "      CHECK_IS_TEST();\n"
+            "      [[fallthrough]];\n",
+            encoding="utf-8",
+        )
+
+        content_features = root / "content/public/common/content_features.cc"
+        content_features.parent.mkdir(parents=True, exist_ok=True)
+        content_features.write_text(
+            "BASE_FEATURE(kAndroidDevToolsFrontend, base::FEATURE_DISABLED_BY_DEFAULT);\n",
+            encoding="utf-8",
+        )
+
+        devtools_java = (
+            root
+            / "chrome/browser/devtools/android/java/src/org/chromium/chrome/browser/devtools/DevToolsWindowAndroid.java"
+        )
+        devtools_java.parent.mkdir(parents=True, exist_ok=True)
+        devtools_java.write_text(
+            "    public static boolean isDevToolsAvailable(Context context) {\n"
+            "        return ContentFeatureMap.isEnabled(ContentFeatureList.ANDROID_DEV_TOOLS_FRONTEND)\n"
+            "                && DeviceFormFactor.isNonMultiDisplayContextOnTablet(context);\n"
+            "    }\n",
+            encoding="utf-8",
+        )
+
     def test_apply_all_and_idempotency(self) -> None:
         overlay_root = Path(__file__).resolve().parent.parent
         with tempfile.TemporaryDirectory() as tmp:

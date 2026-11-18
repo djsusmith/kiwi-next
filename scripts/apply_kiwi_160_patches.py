@@ -145,6 +145,48 @@ def patch_dark_mode_amoled(chromium_src: Path) -> str:
     )
 
 
+def patch_current_channel_logo(chromium_src: Path) -> str:
+    """Prevent CHECK_IS_TEST() crash on dev/beta/stable channels without Google branding."""
+    target = chromium_src / "chrome/browser/ui/webui/current_channel_logo.cc"
+    marker = "Kiwi Next: allow non-Google-branded channels"
+    return _patch_text(
+        target,
+        marker,
+        r"    case version_info::Channel::STABLE:\n      CHECK_IS_TEST\(\);\n      \[\[fallthrough\]\];",
+        "    case version_info::Channel::STABLE:\n      // Kiwi Next: allow non-Google-branded channels\n      [[fallthrough]];",
+        "current_channel_logo_no_test_check",
+    )
+
+
+def patch_devtools_android(chromium_src: Path) -> list[str]:
+    """Enable Android DevTools frontend feature and allow it on phones."""
+    results = []
+    features_cc = chromium_src / "content/public/common/content_features.cc"
+    results.append(
+        _patch_text(
+            features_cc,
+            "BASE_FEATURE(kAndroidDevToolsFrontend, base::FEATURE_ENABLED_BY_DEFAULT);",
+            r"BASE_FEATURE\(kAndroidDevToolsFrontend, base::FEATURE_DISABLED_BY_DEFAULT\);",
+            "BASE_FEATURE(kAndroidDevToolsFrontend, base::FEATURE_ENABLED_BY_DEFAULT);",
+            "enable_android_devtools_frontend_flag",
+        )
+    )
+    devtools_java = (
+        chromium_src
+        / "chrome/browser/devtools/android/java/src/org/chromium/chrome/browser/devtools/DevToolsWindowAndroid.java"
+    )
+    results.append(
+        _patch_text(
+            devtools_java,
+            "Kiwi Next: allow DevTools on phones",
+            r"return ContentFeatureMap\.isEnabled\(ContentFeatureList\.ANDROID_DEV_TOOLS_FRONTEND\)\s*\n\s*&& DeviceFormFactor\.isNonMultiDisplayContextOnTablet\(context\);",
+            "// Kiwi Next: allow DevTools on phones\n        return ContentFeatureMap.isEnabled(ContentFeatureList.ANDROID_DEV_TOOLS_FRONTEND);",
+            "devtools_window_allow_phones",
+        )
+    )
+    return results
+
+
 def patch_toolbar_manager(chromium_src: Path) -> str:
     """Fix ClassCastException on phones by replacing (ToolbarTablet) cast with ViewGroup."""
     target = (
@@ -178,6 +220,22 @@ def patch_branding(chromium_src: Path, overlay_root: Path) -> list[str]:
         else:
             results.append("already:product_name_strings")
 
+    for res_dir in ("res_chromium_base", "res_chromium"):
+        src_dir = overlay_root / "chrome/android/java" / res_dir
+        dst_dir = chromium_src / "chrome/android/java" / res_dir
+        if src_dir.exists() and dst_dir.exists() and src_dir.resolve() != dst_dir.resolve():
+            shutil.copytree(src_dir, dst_dir, dirs_exist_ok=True)
+            for mipmap_dir in dst_dir.glob("mipmap-*"):
+                fg = mipmap_dir / "ic_foreground.png"
+                bg = mipmap_dir / "ic_background.png"
+                if fg.exists():
+                    shutil.copy2(fg, mipmap_dir / "layered_app_icon.png")
+                if bg.exists():
+                    shutil.copy2(bg, mipmap_dir / "layered_app_icon_background.png")
+            results.append(f"applied:icons_{res_dir}")
+        else:
+            results.append(f"already:icons_{res_dir}")
+
     channel_constants = (
         chromium_src
         / "chrome/android/java/res_chromium_base/values/channel_constants.xml"
@@ -194,15 +252,6 @@ def patch_branding(chromium_src: Path, overlay_root: Path) -> list[str]:
             results.append("applied:channel_constants_app_name")
         else:
             results.append("already:channel_constants_app_name")
-
-    for res_dir in ("res_chromium_base", "res_chromium"):
-        src_dir = overlay_root / "chrome/android/java" / res_dir
-        dst_dir = chromium_src / "chrome/android/java" / res_dir
-        if src_dir.exists() and dst_dir.exists() and src_dir.resolve() != dst_dir.resolve():
-            shutil.copytree(src_dir, dst_dir, dirs_exist_ok=True)
-            results.append(f"applied:icons_{res_dir}")
-        else:
-            results.append(f"already:icons_{res_dir}")
     return results
 
 
@@ -215,6 +264,8 @@ def apply_all(chromium_src: Path, overlay_root: Path) -> list[str]:
     results.append(patch_tabbed_app_menu(chromium_src))
     results.append(patch_chrome_tabbed_activity(chromium_src))
     results.append(patch_dark_mode_amoled(chromium_src))
+    results.append(patch_current_channel_logo(chromium_src))
+    results.extend(patch_devtools_android(chromium_src))
     results.extend(patch_branding(chromium_src, overlay_root))
     return results
 
