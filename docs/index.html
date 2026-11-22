@@ -3,24 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kiwi Browser Next &mdash; Chromium 160 &bull; Desktop Extensions &bull; MCP AI</title>
-  <meta name="description" content="Kiwi Browser restarted with modern Chromium 160 core, desktop Chrome extensions on Android, and built-in Model Context Protocol (MCP) agent tools." />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <title>Kiwi Next &mdash; Chromium 160, Desktop Extensions, Tab DevTools &amp; Native MCP on Android</title>
+  <link rel="icon" type="image/png" href="kiwi-app-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #070a13;
-      --card-bg: rgba(15, 23, 42, 0.7);
-      --card-border: rgba(255, 255, 255, 0.09);
-      --primary: #10b981;
-      --primary-light: #34d399;
-      --primary-glow: rgba(16, 185, 129, 0.35);
+      --bg-dark: #060b14;
+      --bg-card: rgba(13, 23, 39, 0.72);
+      --primary: #26c6da;
+      --primary-light: #5eead4;
       --accent: #38bdf8;
-      --text: #f8fafc;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --code-bg: #0b1120;
+      --card-border: rgba(94, 234, 212, 0.14);
+      --code-bg: #030712;
     }
 
     * {
@@ -31,33 +29,33 @@
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.65;
       overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 10% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 90% 45%, rgba(56, 189, 248, 0.15) 0%, transparent 45%);
-      background-attachment: fixed;
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(38, 198, 218, 0.16), transparent 42%),
+        radial-gradient(circle at 85% 22%, rgba(56, 189, 248, 0.14), transparent 42%),
+        radial-gradient(circle at 50% 85%, rgba(14, 165, 233, 0.1), transparent 50%);
+      min-height: 100vh;
     }
 
     .container {
-      width: 100%;
       max-width: 1120px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 24px;
     }
 
-    /* Navbar */
+    /* Header */
     header {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--card-border);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(7, 10, 19, 0.85);
+      background: rgba(6, 11, 20, 0.85);
     }
 
     .nav-wrapper {
@@ -73,67 +71,68 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
-      color: var(--text);
+      color: var(--text-main);
       font-weight: 800;
       font-size: 1.25rem;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
     }
 
     .brand img {
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      display: block;
+      box-shadow: 0 0 18px rgba(38, 198, 218, 0.4);
     }
 
     .nav-links {
       display: flex;
-      gap: 20px;
       align-items: center;
+      gap: 22px;
       flex-wrap: wrap;
     }
 
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.92rem;
       font-weight: 600;
+      font-size: 0.94rem;
       transition: color 0.2s;
     }
 
     .nav-links a:hover {
-      color: #fff;
+      color: var(--text-main);
     }
 
+    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 12px 24px;
+      gap: 10px;
+      padding: 13px 26px;
       border-radius: 12px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       text-decoration: none;
-      transition: all 0.25s ease;
+      transition: all 0.22s ease;
       cursor: pointer;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #fff;
-      box-shadow: 0 4px 20px var(--primary-glow);
+      background: linear-gradient(135deg, #2dd4bf, #0284c7);
+      color: #ffffff;
+      box-shadow: 0 8px 26px rgba(14, 165, 233, 0.34);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(16, 185, 129, 0.5);
+      box-shadow: 0 12px 32px rgba(45, 212, 191, 0.45);
     }
 
     .btn-secondary {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: var(--text);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.14);
     }
 
     .btn-secondary:hover {
@@ -143,7 +142,7 @@
 
     /* Hero */
     .hero {
-      padding: 80px 0 60px;
+      padding: 68px 0 56px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -151,255 +150,306 @@
     }
 
     .hero-logo-box {
+      width: 140px;
+      height: 140px;
       margin-bottom: 24px;
-      animation: float 4s ease-in-out infinite;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, rgba(94, 234, 212, 0.6), rgba(56, 189, 248, 0.5));
+      box-shadow: 0 0 42px rgba(38, 198, 218, 0.35);
+      transition: transform 0.3s ease;
+    }
+
+    .hero-logo-box:hover {
+      transform: scale(1.05);
     }
 
     .hero-logo-box img {
-      width: 140px;
-      height: 140px;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
       display: block;
-      filter: drop-shadow(0 0 35px var(--primary-glow));
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 16px;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: var(--primary-light);
+      padding: 7px 16px;
       border-radius: 999px;
-      font-size: 0.85rem;
+      background: rgba(45, 212, 191, 0.12);
+      border: 1px solid rgba(94, 234, 212, 0.32);
+      color: var(--primary-light);
+      font-size: 0.86rem;
       font-weight: 700;
-      margin-bottom: 24px;
-      letter-spacing: 0.02em;
+      margin-bottom: 22px;
     }
 
     .hero h1 {
-      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-size: clamp(2.1rem, 5.2vw, 3.6rem);
       font-weight: 800;
       letter-spacing: -0.03em;
+      line-height: 1.12;
+      max-width: 860px;
       margin-bottom: 20px;
-      line-height: 1.18;
-      max-width: 900px;
     }
 
     .gradient-text {
-      background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%);
+      background: linear-gradient(135deg, #5eead4 0%, #38bdf8 55%, #818cf8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero p {
-      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      font-size: clamp(1rem, 2.2vw, 1.18rem);
       color: var(--text-muted);
-      max-width: 740px;
-      margin: 0 auto 36px;
+      max-width: 720px;
+      margin-bottom: 30px;
     }
 
     .hero-actions {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 14px;
       flex-wrap: wrap;
-      margin-bottom: 60px;
+      margin-bottom: 18px;
     }
 
-    /* Stats Grid */
+    .checksum-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 8px 14px;
+      border-radius: 10px;
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 42px;
+    }
+
+    .checksum-pill code {
+      color: var(--primary-light);
+    }
+
+    /* Stats Bar */
     .stats-bar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
       width: 100%;
-      margin-bottom: 90px;
+      max-width: 900px;
     }
 
     .stat-card {
-      background: var(--card-bg);
+      background: var(--bg-card);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 24px;
-      backdrop-filter: blur(10px);
+      padding: 20px 14px;
+      border-radius: 16px;
       text-align: center;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(16, 185, 129, 0.35);
     }
 
     .stat-num {
-      font-size: 2.2rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--primary-light);
-      margin-bottom: 6px;
-      letter-spacing: -0.02em;
+      margin-bottom: 4px;
     }
 
     .stat-label {
+      font-size: 0.84rem;
       color: var(--text-muted);
-      font-size: 0.88rem;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
-    /* Section Headers */
+    /* Sections */
+    section {
+      padding: 58px 0;
+    }
+
     .section-title {
       text-align: center;
-      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      font-size: clamp(1.75rem, 3.6vw, 2.35rem);
       font-weight: 800;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       letter-spacing: -0.02em;
     }
 
     .section-sub {
       text-align: center;
       color: var(--text-muted);
-      font-size: 1.1rem;
-      max-width: 640px;
-      margin: 0 auto 50px;
+      font-size: 1.02rem;
+      max-width: 680px;
+      margin: 0 auto 40px;
     }
 
-    /* Features Grid */
+    /* Feature Grid */
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      margin-bottom: 90px;
+      gap: 20px;
     }
 
     .feature-card {
-      background: var(--card-bg);
+      background: var(--bg-card);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 32px;
-      backdrop-filter: blur(10px);
-      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-      display: flex;
-      flex-direction: column;
+      border-radius: 18px;
+      padding: 28px;
+      transition: transform 0.22s ease, border-color 0.22s ease;
     }
 
     .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(16, 185, 129, 0.4);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      transform: translateY(-4px);
+      border-color: rgba(94, 234, 212, 0.45);
     }
 
     .feature-icon {
-      width: 54px;
-      height: 54px;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      border-radius: 14px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(45, 212, 191, 0.12);
+      border: 1px solid rgba(94, 234, 212, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 22px;
-      color: var(--primary);
+      font-size: 1.45rem;
+      margin-bottom: 16px;
     }
 
     .feature-card h3 {
-      font-size: 1.25rem;
+      font-size: 1.18rem;
       font-weight: 700;
-      margin-bottom: 12px;
-      color: #fff;
+      margin-bottom: 10px;
     }
 
     .feature-card p {
       color: var(--text-muted);
-      font-size: 0.96rem;
-      line-height: 1.65;
+      font-size: 0.94rem;
     }
 
-    /* MCP Section */
-    .mcp-box {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(56, 189, 248, 0.08) 100%);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      border-radius: 24px;
-      padding: clamp(28px, 5vw, 48px);
-      margin-bottom: 90px;
+    .feature-card code,
+    .panel-box code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84rem;
+      color: var(--primary-light);
+      background: rgba(2, 6, 23, 0.7);
+      padding: 2px 6px;
+      border-radius: 6px;
     }
 
-    .mcp-box h2 {
-      font-size: clamp(1.6rem, 3vw, 2.1rem);
+    /* Panel Boxes */
+    .panel-box {
+      background: linear-gradient(145deg, rgba(13, 23, 39, 0.9), rgba(6, 11, 20, 0.95));
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 22px;
+      padding: 36px;
+      margin-bottom: 32px;
+    }
+
+    .panel-box h2 {
+      font-size: 1.65rem;
       font-weight: 800;
-      margin-bottom: 14px;
-      letter-spacing: -0.01em;
+      margin-bottom: 12px;
     }
 
-    .mcp-box > p {
+    .panel-box > p {
       color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 800px;
-      line-height: 1.65;
+      margin-bottom: 24px;
+      max-width: 780px;
     }
 
+    /* MCP Tools Grid */
     .mcp-tools-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 18px;
-      margin-top: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
     }
 
     .mcp-tool-pill {
       background: var(--code-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 20px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.88rem;
-      transition: border-color 0.2s;
-    }
-
-    .mcp-tool-pill:hover {
-      border-color: rgba(52, 211, 153, 0.4);
+      padding: 18px;
     }
 
     .mcp-tool-pill strong {
+      font-family: 'JetBrains Mono', monospace;
       color: var(--primary-light);
       display: block;
       margin-bottom: 6px;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
     }
 
     .mcp-tool-pill span {
       color: var(--text-muted);
-      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 0.88rem;
-      line-height: 1.5;
       display: block;
     }
 
-    /* Code Block */
-    .code-snippet {
+    /* Code Blocks */
+    pre.code-snippet {
       background: var(--code-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 16px 20px;
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-radius: 14px;
+      padding: 18px 20px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.88rem;
-      color: #38bdf8;
+      font-size: 0.85rem;
+      color: #7dd3fc;
       overflow-x: auto;
-      margin-top: 24px;
+      line-height: 1.6;
+      margin-top: 14px;
+    }
+
+    /* Patch Matrix Table */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      background: var(--bg-card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th,
+    td {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      vertical-align: top;
+    }
+
+    th {
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--primary-light);
+      font-weight: 700;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #7dd3fc;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
     }
 
     /* Footer */
     footer {
-      border-top: 1px solid var(--card-border);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       padding: 48px 0;
       text-align: center;
       color: var(--text-muted);
       font-size: 0.92rem;
+      margin-top: 24px;
     }
 
     footer a {
@@ -412,29 +462,31 @@
       text-decoration: underline;
     }
 
-    /* Responsive Mobile Alignments */
-    @media (max-width: 680px) {
-      .nav-wrapper {
-        justify-content: center;
-      }
+    @media (max-width: 720px) {
+      .nav-wrapper,
       .nav-links {
         justify-content: center;
       }
+
       .hero {
-        padding: 40px 0 40px;
+        padding: 44px 0 36px;
       }
+
       .hero-actions {
         width: 100%;
         flex-direction: column;
       }
+
       .btn {
         width: 100%;
       }
+
       .stats-bar {
         grid-template-columns: 1fr 1fr;
       }
-      .features-grid {
-        grid-template-columns: 1fr;
+
+      .panel-box {
+        padding: 24px 18px;
       }
     }
   </style>
@@ -444,14 +496,16 @@
   <header>
     <div class="container nav-wrapper">
       <a href="#" class="brand">
-        <img src="logo.svg" alt="Kiwi Logo" />
+        <img src="kiwi-app-icon.png" alt="Kiwi Next Logo" />
         <span>Kiwi Next</span>
       </a>
       <div class="nav-links">
         <a href="#features">Features</a>
-        <a href="#mcp">MCP Tools</a>
-        <a href="https://github.com/djsusmith/kiwi-next/releases" target="_blank">Releases</a>
-        <a href="https://github.com/djsusmith/kiwi-next" class="btn btn-primary" target="_blank">View GitHub</a>
+        <a href="#mcp">MCP &amp; CDP</a>
+        <a href="#patches">Chromium 160 Patches</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/djsusmith/kiwi-next/releases/tag/v160.0.8157.3" target="_blank">Releases</a>
+        <a href="https://github.com/djsusmith/kiwi-next" class="btn btn-primary" target="_blank">GitHub</a>
       </div>
     </div>
   </header>
@@ -459,124 +513,207 @@
   <main class="container">
     <section class="hero">
       <div class="hero-logo-box">
-        <img src="logo.svg" alt="Kiwi Next Cyber Logo" />
+        <img src="kiwi-app-icon.png" alt="Kiwi Next White Kiwi App Logo" />
       </div>
       <div class="badge">
-        <span>🔥</span> The Legend Reborn &bull; Chromium 160 Dev Core
+        Verified on Device &bull; Chromium 160.0.8157.3 Dev &bull; Android 17 (API 37)
       </div>
-      <h1>Desktop Extensions on Android.<br /><span class="gradient-text">Now Supercharged by AI Agents.</span></h1>
+      <h1>Kiwi Browser Reborn on <span class="gradient-text">Chromium 160</span> with Native AI Agent Control.</h1>
       <p>
-        When Kiwi Browser was archived, the mobile open web lost a pioneer. We took up the torch &mdash; modernizing the core to Chromium 160 and embedding Model Context Protocol (MCP) tools for autonomous coding agents.
+        Authentic desktop Manifest V3 extensions on smartphones, full Developer Tools opening as a regular browser tab, on-device <code>chrome://inspect/#devices</code>, and native loopback CDP on port <code>9222</code> for direct <code>chrome-devtools-mcp</code> integration.
       </p>
       <div class="hero-actions">
-        <a href="https://github.com/djsusmith/kiwi-next/releases/download/v160.0.8157.3-preview/kiwi-next-arm64-v160.0.8157.3.apk" class="btn btn-primary" target="_blank">
-          ⬇️ Download APK (v160.0.8157.3)
+        <a href="https://github.com/djsusmith/kiwi-next/releases/download/v160.0.8157.3/kiwi-next-arm64-v160.0.8157.3.apk" class="btn btn-primary" target="_blank">
+          Download Verified ARM64 APK (v160.0.8157.3)
         </a>
         <a href="https://github.com/djsusmith/kiwi-next" class="btn btn-secondary" target="_blank">
-          ⭐ Star on GitHub
+          View Source &amp; Patcher on GitHub
         </a>
+      </div>
+      <div class="checksum-pill">
+        Package: <code>com.kiwibrowser.next</code> &bull; Size: <code>513 MB</code> &bull; SHA-256: <code>eb51775ef7fe729c05a7a3fc3211aec9a64c8ee107e250f7fda4d8810278edb6</code>
       </div>
 
       <div class="stats-bar">
         <div class="stat-card">
-          <div class="stat-num">160 Dev</div>
-          <div class="stat-label">Chromium Engine</div>
+          <div class="stat-num">160.0.8157.3</div>
+          <div class="stat-label">Chromium Dev Core</div>
         </div>
         <div class="stat-card">
           <div class="stat-num">MV3</div>
-          <div class="stat-label">Full Extensions</div>
+          <div class="stat-label">Phone Extensions</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">MCP</div>
-          <div class="stat-label">Autonomous Agent</div>
+          <div class="stat-num">:9222 / :9223</div>
+          <div class="stat-label">Native CDP &amp; MCP</div>
         </div>
         <div class="stat-card">
-          <div class="stat-num">100%</div>
-          <div class="stat-label">Open Source</div>
+          <div class="stat-num">API 37</div>
+          <div class="stat-label">Android 17 ARM64</div>
         </div>
       </div>
     </section>
 
     <section id="features">
-      <h2 class="section-title">Engineered for Power Users &amp; AI</h2>
-      <p class="section-sub">Unmatched mobile freedom, developer control, and state-of-the-art Chromium architecture.</p>
-      
+      <h2 class="section-title">Device-Verified Core Features</h2>
+      <p class="section-sub">Every feature below was compiled from Chromium 160 source and physically verified on Samsung Galaxy S25 Ultra (SM-S938B, Android 17).</p>
+
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">🧩</div>
-          <h3>Desktop Extensions on Mobile</h3>
-          <p>Run your favorite productivity extensions, adblockers, developer tools, and password managers directly in your mobile browser without artificial restrictions.</p>
+          <div class="feature-icon">&#129513;</div>
+          <h3>Desktop MV3 Extensions on Phones</h3>
+          <p>Built with <code>is_desktop_android = true</code> and patched for smartphone toolbars (<code>ToolbarPhone</code> &rarr; <code>ViewGroup</code>). Includes <strong>Extensions</strong>, <strong>Manage Extensions</strong> (<code>chrome://extensions</code>), and <strong>Chrome Web Store</strong> right inside the 3-dot menu.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>Modernized Chromium 160 Core</h3>
-          <p>Upgraded to Chromium 160 Dev (160.0.8157.3) with current Blink rendering, V8 optimizations, and modern Android 17 API support.</p>
+          <div class="feature-icon">&#128736;</div>
+          <h3>Tab-Native Developer Tools</h3>
+          <p>Enables <code>kAndroidDevToolsFrontend</code> on phones and inserts DevTools directly into <code>ChromeTabbedActivity</code>&apos;s <code>TabModel</code> as a regular browser tab &mdash; keeping the inspected tab alive at <code>MODERATE</code> process importance.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🤖</div>
-          <h3>Native CDP (127.0.0.1:9222) &amp; MCP</h3>
-          <p>Exposes Chrome DevTools Protocol natively on loopback port 9222 for direct <code>chrome-devtools-mcp</code> connections, plus a Manifest V3 WebSocket bridge on port 9223.</p>
+          <div class="feature-icon">&#128269;</div>
+          <h3>On-Device chrome://inspect/#devices</h3>
+          <p>Compiles and registers <code>InspectUIConfig</code> on Android. Immediately lists <strong>Kiwi Next (Local Device)</strong> open tabs, extension background pages, and service workers with <code>inspect</code>, <code>pause</code>, <code>focus tab</code>, <code>reload</code>, and <code>close</code>.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🛠️</div>
-          <h3>Tab DevTools &amp; chrome://inspect</h3>
-          <p>Full Chromium Developer Tools opens directly as a regular browser tab on phones, alongside on-device <code>chrome://inspect/#devices</code> for pages, extensions, and service workers.</p>
+          <div class="feature-icon">&#129302;</div>
+          <h3>Native Loopback CDP (127.0.0.1:9222)</h3>
+          <p>Binds Android&apos;s <code>DevToolsServer</code> to TCP <code>127.0.0.1:9222</code> with <code>--remote-allow-origins=*</code>, bypassing Android 17 SELinux abstract-socket blocks so <code>chrome-devtools-mcp</code> and Antigravity <code>/browser</code> connect directly.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">⚙️</div>
-          <h3>Reproducible Builds</h3>
-          <p>Gone are the private black-box build servers. Our public GitHub Actions workflow uses Google depot_tools to compile clean ARM64 APKs.</p>
+          <div class="feature-icon">&#9889;</div>
+          <h3>kiwi_mcp_bridge v1.1.0 Extension</h3>
+          <p>Manifest V3 companion extension connecting over <code>ws://127.0.0.1:9223</code> with <code>chrome.debugger</code> <code>Runtime.evaluate</code>, raw <code>cdp_send</code>, tab management, and PNG viewport capture.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🚀</div>
-          <h3>Smooth High-Refresh Display</h3>
-          <p>Optimized for modern 120Hz/144Hz AMOLED displays with custom GN compiler flags and hardware-accelerated composition.</p>
+          <div class="feature-icon">&#127769;</div>
+          <h3>AMOLED Dark Mode &amp; Kiwi Identity</h3>
+          <p>Tunes Blink&apos;s dark-mode foreground brightness threshold from <code>150</code> to Kiwi&apos;s high-contrast AMOLED preset (<code>127</code>), packaged cleanly as <code>com.kiwibrowser.next</code> with the white Kiwi adaptive launcher icon.</p>
         </div>
       </div>
     </section>
 
-    <section id="mcp" class="mcp-box">
-      <h2>🤖 Built-in Model Context Protocol (MCP) Bridge</h2>
-      <p>
-        Kiwi Next includes a native Manifest V3 tool provider in <code>extensions/kiwi_mcp_bridge/</code>. 
-        It connects to your local AI coding agent over <code>ws://127.0.0.1:9223</code>, giving agents structured tools to interact with your live browser:
-      </p>
+    <section id="mcp">
+      <div class="panel-box">
+        <h2>Native CDP (:9222) &amp; MCP Bridge (:9223)</h2>
+        <p>
+          Kiwi Next gives AI coding assistants two verified control channels on Android without root: direct <code>chrome-devtools-mcp</code> access over loopback TCP port <code>9222</code>, and the structured Manifest V3 WebSocket bridge in <code>extensions/kiwi_mcp_bridge/</code> on port <code>9223</code>.
+        </p>
 
-      <div class="mcp-tools-list">
-        <div class="mcp-tool-pill">
-          <strong>list_tabs</strong>
-          <span>Inspect open tabs, URLs, and active status across windows.</span>
+        <div class="mcp-tools-list">
+          <div class="mcp-tool-pill">
+            <strong>list_tabs</strong>
+            <span>Query all open tabs, IDs, titles, URLs, and active window state via <code>chrome.tabs.query</code>.</span>
+          </div>
+          <div class="mcp-tool-pill">
+            <strong>navigate / new_tab / close_tab</strong>
+            <span>Open, navigate, and close browser tabs programmatically.</span>
+          </div>
+          <div class="mcp-tool-pill">
+            <strong>eval_js</strong>
+            <span>Execute client-side JavaScript via <code>chrome.debugger</code> (<code>Runtime.evaluate</code>), bypassing strict CSP.</span>
+          </div>
+          <div class="mcp-tool-pill">
+            <strong>cdp_send</strong>
+            <span>Forward raw Chrome DevTools Protocol methods (<code>DOM.getDocument</code>, <code>Page.*</code>, <code>Network.*</code>).</span>
+          </div>
+          <div class="mcp-tool-pill">
+            <strong>capture_screenshot</strong>
+            <span>Capture crisp PNG viewport images via <code>chrome.tabs.captureVisibleTab</code>.</span>
+          </div>
         </div>
-        <div class="mcp-tool-pill">
-          <strong>navigate</strong>
-          <span>Command the browser to load any website URL programmatically.</span>
-        </div>
-        <div class="mcp-tool-pill">
-          <strong>eval_js</strong>
-          <span>Evaluate scripts directly in the client-side DOM context.</span>
-        </div>
-        <div class="mcp-tool-pill">
-          <strong>capture_screenshot</strong>
-          <span>Grab crisp PNG viewport captures for vision models.</span>
-        </div>
+
+        <pre class="code-snippet"># 1. Connect chrome-devtools-mcp / Antigravity directly to Kiwi Next:
+chrome-devtools-mcp --browserUrl=http://127.0.0.1:9222
+
+# 2. Verify live CDP endpoint from terminal:
+curl --noproxy '*' http://127.0.0.1:9222/json/version
+curl --noproxy '*' http://127.0.0.1:9222/json/list</pre>
       </div>
+    </section>
 
-      <div class="code-snippet">
-        # Direct chrome-devtools-mcp connection (native loopback CDP on port 9222):<br />
-        chrome-devtools-mcp --browserUrl=http://127.0.0.1:9222
+    <section id="patches">
+      <h2 class="section-title">Chromium 160 Engineering &amp; Patch Matrix</h2>
+      <p class="section-sub">All customizations are applied cleanly and idempotently via <code>scripts/apply_kiwi_160_patches.py</code> (11/11 unit tests passing).</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Module / Fix</th>
+              <th>Chromium 160 Target File(s)</th>
+              <th>What It Solves</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Phone Extensions Toolbar</strong></td>
+              <td><code>toolbar_phone.xml</code>, <code>ToolbarManager.java</code></td>
+              <td>Adds <code>extensions_toolbar_container_stub</code> and fixes smartphone <code>ClassCastException</code> by casting <code>mToolbarLayout</code> to <code>ViewGroup</code> instead of <code>ToolbarTablet</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Overflow Menu &amp; Web Store</strong></td>
+              <td><code>AppMenuPropertiesDelegateImpl.java</code>, <code>TabbedAppMenuPropertiesDelegate.java</code>, <code>ChromeTabbedActivity.java</code></td>
+              <td>Exposes Extensions, Manage Extensions, Chrome Web Store, and DevTools in the phone 3-dot menu with null-safe fallback to <code>chrome://extensions</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>WebUI Channel Crash Fix</strong></td>
+              <td><code>chrome/browser/ui/webui/current_channel_logo.cc</code></td>
+              <td>Removes <code>CHECK_IS_TEST()</code> abort so <code>chrome://extensions</code> and WebUIs load cleanly on <code>android_channel = &quot;dev&quot;</code> without Google branding.</td>
+            </tr>
+            <tr>
+              <td><strong>Tab-Native DevTools</strong></td>
+              <td><code>content_features.cc</code>, <code>DevToolsWindowAndroid.java</code>, <code>devtools_window.cc</code>, <code>MoreToolsItemBuilder.java</code>, <code>ChromeActivity.java</code></td>
+              <td>Enables <code>kAndroidDevToolsFrontend</code> on phones, inserts DevTools into <code>TabModel</code> as a regular tab, keeps inspected tabs alive at <code>MODERATE</code> importance, and routes native-page DevTools taps to <code>chrome://inspect/#devices</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>chrome://inspect/#devices</strong></td>
+              <td><code>inspect/BUILD.gn</code>, <code>inspect_ui.cc</code>, <code>devtools_targets_ui.cc</code>, <code>inspect.js</code>, <code>chrome_paks.gni</code>, <code>chrome_web_ui_configs.cc</code></td>
+              <td>Builds and registers <code>InspectUIConfig</code> on Android and populates local browser tabs, extensions, and service workers directly under <code>#devices</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Native Loopback CDP :9222</strong></td>
+              <td><code>chrome/browser/android/devtools_server.cc</code>, <code>inspect_ui.cc</code></td>
+              <td>Binds <code>net::TCPServerSocket</code> on <code>127.0.0.1:9222</code> with <code>--remote-allow-origins=*</code> for direct MCP and <code>chrome://inspect/#remote-debugging</code> access.</td>
+            </tr>
+            <tr>
+              <td><strong>AMOLED &amp; Branding</strong></td>
+              <td><code>dark_mode_settings_builder.cc</code>, <code>chromium_strings.grd</code>, <code>channel_constants.xml</code>, <code>res_chromium_base/mipmap-*</code></td>
+              <td>Sets AMOLED foreground brightness threshold to <code>127</code>, brands app as <strong>Kiwi Next</strong> (<code>com.kiwibrowser.next</code>), and maps white Kiwi adaptive icons.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="install">
+      <div class="panel-box">
+        <h2>Shizuku Installation &amp; Background CDP Tip</h2>
+        <p>
+          Install the signed ARM64 APK directly on your device or via Shizuku (<code>rish</code>). On Android 15&ndash;17, whitelisting <code>com.kiwibrowser.next</code> from battery optimization keeps port <code>9222</code> responsive while using AI agents in another app.
+        </p>
+        <pre class="code-snippet"># Install via Shizuku (no root required)
+rish -c "cp /storage/emulated/0/Download/kiwi-next-arm64-v160.0.8157.3.apk /data/local/tmp/kiwi-next.apk"
+rish -c "chmod 666 /data/local/tmp/kiwi-next.apk"
+rish -c "pm install -r -d /data/local/tmp/kiwi-next.apk"
+rish -c "rm -f /data/local/tmp/kiwi-next.apk"
+
+# Prevent Android cached-app freezer from pausing CDP port 9222 in background
+rish -c "dumpsys deviceidle whitelist +com.kiwibrowser.next"
+rish -c "cmd appops set com.kiwibrowser.next RUN_ANY_IN_BACKGROUND allow"
+rish -c "am set-standby-bucket com.kiwibrowser.next active"</pre>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container">
-      <div style="margin-bottom: 20px;">
-        <p style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+      <div style="margin-bottom: 18px;">
+        <p style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 6px;">
           Revived &amp; Maintained by <strong>Ahnaf Hasan Susmith</strong>
         </p>
         <p style="color: var(--text-muted); font-size: 0.9rem;">
@@ -584,12 +721,12 @@
         </p>
       </div>
       <p style="font-size: 0.85rem; color: #64748b;">
-        Kiwi Next is an independent revival project based on the open-source Kiwi Browser &amp; Chromium codebases.
+        Kiwi Next is an independent community revival based on the open-source Kiwi Browser &amp; Chromium codebases.
       </p>
       <p style="margin-top: 12px;">
-        <a href="https://github.com/djsusmith/kiwi-next">GitHub Repository</a> &bull; 
-        <a href="https://github.com/djsusmith/kiwi-next/blob/main/LICENSE">License</a> &bull; 
-        <a href="https://github.com/djsusmith/kiwi-next/releases">Releases</a>
+        <a href="https://github.com/djsusmith/kiwi-next">GitHub Repository</a> &bull;
+        <a href="https://github.com/djsusmith/kiwi-next/blob/kiwi/LICENSE">License</a> &bull;
+        <a href="https://github.com/djsusmith/kiwi-next/releases/tag/v160.0.8157.3">Release v160.0.8157.3</a>
       </p>
     </div>
   </footer>
