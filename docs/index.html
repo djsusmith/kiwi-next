@@ -516,14 +516,14 @@
 
         <div class="feature-card">
           <div class="feature-icon">🤖</div>
-          <h3>Model Context Protocol (MCP)</h3>
-          <p>Built-in WebSocket bridge allowing autonomous agents (Antigravity, Claude, Cursor) to automate tabs, inspect the DOM, and capture viewports directly.</p>
+          <h3>Native CDP (127.0.0.1:9222) &amp; MCP</h3>
+          <p>Exposes Chrome DevTools Protocol natively on loopback port 9222 for direct <code>chrome-devtools-mcp</code> connections, plus a Manifest V3 WebSocket bridge on port 9223.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
-          <h3>Shizuku &amp; ADB Power Tools</h3>
-          <p>Deploy signed APKs and forward Chromium DevTools remote sockets cleanly using ADB / Shizuku without requiring device root.</p>
+          <div class="feature-icon">🛠️</div>
+          <h3>Tab DevTools &amp; chrome://inspect</h3>
+          <p>Full Chromium Developer Tools opens directly as a regular browser tab on phones, alongside on-device <code>chrome://inspect/#devices</code> for pages, extensions, and service workers.</p>
         </div>
 
         <div class="feature-card">
@@ -567,8 +567,8 @@
       </div>
 
       <div class="code-snippet">
-        # Connect your agent bridge over Shizuku socket or WebSocket:<br />
-        python3 scripts/mcp_cdp_bridge.py --socket chrome_devtools_remote --port 9222
+        # Direct chrome-devtools-mcp connection (native loopback CDP on port 9222):<br />
+        chrome-devtools-mcp --browserUrl=http://127.0.0.1:9222
       </div>
     </section>
   </main>

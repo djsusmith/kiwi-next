@@ -46,15 +46,20 @@ Enjoy modern web standards, improved memory management on high-refresh Android f
 ### 🧩 True Desktop Extensions (Manifest V3)
 Install extensions directly from developer source directories, `.crx`, or unpacked folders on your mobile device.
 
-### 🤖 Model Context Protocol (MCP) Bridge
-Built-in `kiwi_mcp_bridge` turns your phone into an autonomous web testing and scraping environment for AI agents.
+### 🤖 Native CDP Loopback (`127.0.0.1:9222`) & MCP Bridge (`ws://127.0.0.1:9223`)
+Kiwi Next binds Chrome DevTools Protocol natively on **`http://127.0.0.1:9222`** (direct compatibility with `chrome-devtools-mcp` / Antigravity without root or ADB port forwarding) and includes the `kiwi_mcp_bridge` MV3 extension (`v1.1.0`) for WebSocket agent control over `ws://127.0.0.1:9223`.
 
 | MCP Tool | Capability |
 | :--- | :--- |
 | `list_tabs` | Query all active/background tabs, URLs, and titles |
-| `navigate` | Send tabs to target URLs automatically |
-| `eval_js` | Execute client-side JavaScript in page context |
-| `capture_screenshot` | Grab pristine PNG viewport captures |
+| `navigate` / `new_tab` / `close_tab` | Open, navigate, and close browser tabs programmatically |
+| `eval_js` | Execute JavaScript via `chrome.debugger` (`Runtime.evaluate`) |
+| `cdp_send` | Forward raw Chrome DevTools Protocol commands (`DOM.*`, `Page.*`, `Network.*`) |
+| `capture_screenshot` | Grab PNG viewport captures via `chrome.tabs.captureVisibleTab` |
+
+### 🛠️ Developer Tools as a Browser Tab & `chrome://inspect/#devices`
+- **DevTools in a Tab:** Tapping **⋮ → Dev tools** or **inspect** opens full Chromium DevTools directly as a regular tab inside Kiwi Next (with `ChildProcessImportance::MODERATE` keeping the inspected tab alive).
+- **On-Device Inspector:** Navigate to `chrome://inspect/#devices` (plus `#pages`, `#extensions`, `#service-workers`, `#remote-debugging`) to inspect open tabs, extension service workers, and remote debugging endpoints directly on your phone.
 
 ### ⚡ Shizuku / ADB Elevated Deployment
 Cleanly deploy, install, launch, and expose DevTools sockets over ADB/Shizuku without requiring root:
@@ -79,10 +84,10 @@ flowchart TD
 
     subgraph Phone["Android Device Execution"]
         OUT -->|Shizuku pm install| APP[🥝 Kiwi Browser Reborn]
-        APP --> EXT[Integrated MCP MV3 Extension]
-        EXT <-->|WebSocket ws://127.0.0.1:9223| AI[Antigravity / AI Agent]
-        APP -.->|CDP Socket @chrome_devtools_remote| SOC[mcp_cdp_bridge.py]
-        SOC <-->|HTTP CDP 127.0.0.1:9222| AI
+        APP -->|Native Loopback CDP| CDP[http://127.0.0.1:9222]
+        CDP <-->|chrome-devtools-mcp| AI[Antigravity / AI Agent]
+        APP --> EXT[kiwi_mcp_bridge MV3 Extension]
+        EXT <-->|WebSocket ws://127.0.0.1:9223| AI
     end
 ```
 
@@ -90,8 +95,8 @@ flowchart TD
 
 ## 📦 Getting the APK
 
-1. **GitHub Releases & Artifacts:** Visit our [Actions Workflow](https://github.com/djsusmith/src.next/actions) to download the latest automated `kiwi-arm64.apk` builds.
-2. **Build It Yourself:** Run the reproducible pipeline using your own runner and [`.github/workflows/build_apk.yml`](.github/workflows/build_apk.yml).
+1. **GitHub Releases & Artifacts:** Visit [Kiwi Next Releases](https://github.com/djsusmith/kiwi-next/releases) to download the verified `kiwi-next-arm64.apk` build (`com.kiwibrowser.next`, Chromium `160.0.8157.3`).
+2. **Build It Yourself:** Run the reproducible pipeline using your own runner, [`scripts/apply_kiwi_160_patches.py`](scripts/apply_kiwi_160_patches.py), and [`.github/workflows/build_apk.yml`](.github/workflows/build_apk.yml).
 
 ---
 
